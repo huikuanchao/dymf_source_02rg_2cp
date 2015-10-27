@@ -46,13 +46,17 @@ void update_euler_2d(){
 
 	    for(k =0 ;k < Dim ; k++){
 
-	       if(k == 0)	x[ind][k] = x[cent_ind][k] + tmp_x;
-	       else x[ind][k] = x[cent_ind][k] + tmp_y;
-	       
+	       if(k == 0)	{x[ind][k] = x[cent_ind][k] + tmp_x;
+	       }
+	       else {x[ind][k] = x[cent_ind][k] + tmp_y;
+	       }
 	       if(x[ind][k] < 0.0 )
 	             x[ind][k] += L[k];
-	       else if(x[ind][k] > L[k]) ;
+	       else if(x[ind][k] > L[k]) 
 	             x[ind][k] -= L[k];
+	       else{
+
+	       }
 	    }//k
 	
 	 }//j

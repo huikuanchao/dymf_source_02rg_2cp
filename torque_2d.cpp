@@ -30,8 +30,7 @@ reduction(+:Ubond)
 
 		Ubond += 1.5*mdr2;	   
 	      for(j=0;j<1;j++){
-
-	        //for(k=0 ; k<Dim ; k++){
+            	        //for(k=0 ; k<Dim ; k++){
 		//	for(l=0; l<Dim ; l++){
 		   		real_trq[i][j] += 3.0*drp[0]*dr[1] - 3.0*drp[1]*dr[0];	   
 		//	}//l
@@ -59,7 +58,7 @@ reduction(+:Ubond)
 
 	        //for(k=0 ; k<Dim ; k++){
 		//	for(l=0; l<Dim ; l++){
-		   		real_trq[i][j] += 3.0*drp[0]*dr[1] - 3.0*drp[1]*dr[0];	   
+	           real_trq[i][j] += 3.0*drp[0]*dr[1] - 3.0*drp[1]*dr[0];	   
 		//	}//l
 	      	
 
@@ -76,7 +75,6 @@ reduction(+:Ubond)
 
 
 	    
-
 
 
 	   //get the quaternions' langevin force term, trq//

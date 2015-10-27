@@ -8,8 +8,6 @@ void forces() {
   int i,j, m, gind, t1, t2 ;
 
   charge_grid() ;
-
-
   ///////////////////////////////////////////////
   // Reset the particle forces and grid grad w //
   ///////////////////////////////////////////////
@@ -22,7 +20,6 @@ void forces() {
   for ( i=0 ; i<M ; i++ )
     for ( j=0 ; j<Dim ; j++ ) 
       gradwA[j][i] = gradwB[j][i] = gradwP[j][i] = 0.0 ;
-
 
 
   //////////////////////////////////////////////////
@@ -122,7 +119,7 @@ void forces() {
         gradwB[j][i] += tmp[i] * ( kappa + ( A_partics ? chiAB : 0.0 ) ) / rho0 ;
       }
     }
-
+   
     // A Monomers acting on particles //
     fftw_fwd( rho[0] , ktmp ) ;
     for ( j=0 ; j<Dim ; j++ ) {
@@ -138,7 +135,6 @@ void forces() {
         gradwP[j][i] += tmp[i] * kappa / rho0 ;
 
     }
-
     // B Monomers acting on particles //
     fftw_fwd( rho[1] , ktmp ) ;
     for ( j=0 ; j<Dim ; j++) {
@@ -154,7 +150,6 @@ void forces() {
         gradwP[j][i] += tmp[i] * ( kappa + ( A_partics ? chiAB : 0.0 ) ) / rho0 ;
 
     }
-
 
   }// if ( nP > 0 )
 
@@ -183,7 +178,6 @@ void forces() {
     for ( j=0 ; j<Dim ; j++ )
       f[i][j] *= gvol ;
   }
-
 
   ////////////////////////////
   // Call the bonded forces //

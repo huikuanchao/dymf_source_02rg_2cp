@@ -66,7 +66,7 @@ void initialize() {
 
   p_m = Vp;
 
-  Diff_rot *= 1.0 / Vp / Rp / Rp ;
+  Diff_rot *= (Dim ==3 ? 2.5 : 2.0)*1.0 / Vp / Rp / Rp ;
 
 
   nP = nsP = 0.0 ;
@@ -75,8 +75,9 @@ void initialize() {
 
     if ( sigma > 0.0 ) {
       if ( Dim == 2 ){
-        ng_per_partic = int( fga*sigma * PI * Rp * 2.0 ) ;
-      	ngb_per_partic = int( (1.0-fga)*sigma * PI * Rp * 2.0 ) ;
+        ng_per_partic = int( 0.5 +fga*sigma * PI * Rp * 2.0 ) ;
+      	ngb_per_partic = int( 0.5 +(1.0-fga)*sigma * PI * Rp * 2.0 ) ;
+        cout<<"orig ngr "<<sigma * PI * Rp * 2.0<<endl;
       } 
       else if ( Dim == 3 ){
         ng_per_partic = int ( fga*sigma * 4.0 * PI * Rp * Rp ) ;
@@ -420,10 +421,10 @@ sizeof(complex<double>*));
   // the grafting sites on the grafted nanoparticles. 
   graft_req = ( double** ) calloc( nP , sizeof( double* ) ) ;
   for ( i=0 ; i<nP ; i++ )
-    graft_req[i] = ( double* ) calloc( ng_per_partic , sizeof( double ) ) ;
+    graft_req[i] = ( double* ) calloc( ngb_per_partic+ng_per_partic , sizeof( double ) ) ;
 
-  grf_bf_x = ( double** ) calloc( ng_per_partic*nP, sizeof( double *) ) ;
-  for ( i=0 ; i<ng_per_partic*nP ; i++ )
+  grf_bf_x = ( double** ) calloc((ngb_per_partic+ng_per_partic)*nP, sizeof( double *) ) ;
+  for ( i=0 ; i<(ngb_per_partic+ng_per_partic)*nP ; i++ )
 	grf_bf_x[i] = ( double* ) calloc( Dim , sizeof( double ) ) ;
 
   euler_ang = ( double** ) calloc( nP , sizeof( double* ) ) ;
@@ -463,7 +464,7 @@ sizeof(complex<double>*));
 	}
    }
  
- mem_use += nP * (ng_per_partic+ 3*27+3*2)* sizeof( double ) ;
+ mem_use += nP * (ngb_per_partic+ng_per_partic+ 3*27+3*2)* sizeof( double ) ;
 
 
 

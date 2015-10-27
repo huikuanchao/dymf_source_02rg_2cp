@@ -351,7 +351,7 @@ void write_np() {
 
   FILE *otp ;
   int gind,i, j, ind, k, m, resind , center_ind;
-  int real_ind,sites_per_gnp = 1 + ng_per_partic * ( 1 + Ng );
+  int real_ind,sites_per_gnp = 1 + ngb_per_partic*(Ngb+1)+ng_per_partic * ( 1 + Ng );
 
   if ( step == 0 ) 
     otp = fopen( "traj_np.gro" , "w" ) ;
@@ -399,6 +399,24 @@ void write_np() {
         ind++ ;
         real_ind ++; 
     }//ng_per_partic
+
+   for ( i=0 ; i<ngb_per_partic * ( Ngb+1 ) ; i++ ){
+	fprintf( otp , "%5d" , resind % 100000 + 1 ) ;
+	fprintf( otp , "%-5s" , "GP" ) ;
+	fprintf( otp , "%5s" , xc[real_ind] ) ;
+
+	fprintf( otp , "%5d" , ind % 100000 + 1 ) ;
+
+	for ( j=0 ; j<Dim ; j++ )
+	  fprintf( otp , "%8.3lf" , x[real_ind][j] / 10.0 ) ;
+    	for ( j=Dim ; j<3 ; j++ )
+	  fprintf( otp , "%8.3lf" , 0.0 );
+    	
+	fprintf( otp , "\n" ) ;
+        ind++ ;
+        real_ind ++; 
+    }//ng_per_partic
+
 
     
       
@@ -781,7 +799,7 @@ void random_config( void ) {
     for ( j=0 ; j<Dim ; j++ )
       x[ind][j] = ran2() * L[j] ;
 
-    for(j=0 ; j<3 ; j++){
+ if(Dim ==3 ) {  for(j=0 ; j<3 ; j++){
 
 	euler_ang[k][j] = 0;
     	euler_q[k][j+1] = 0; 
@@ -789,7 +807,7 @@ void random_config( void ) {
 
     euler_q[k][0] = 1;
    // euler_ang[k][0] = PI/2.0; 
-
+    }
     tp[ ind ] = 2 ;
 
     center_ind = ind ;
@@ -802,24 +820,24 @@ void random_config( void ) {
       // Place the grafting site //
       if(Dim == 3 and uni_sig ==1){ //fibonacci grafting sites
 	 fibonacci_u ( u , m );
-	 gind = k*ng_per_partic + m;
+	 gind = k*(ng_per_partic+ ngb_per_partic) + m;
       	 if(k==0 and m==0)cout<<"fibonacci grafting is used"<<endl;
       }
       else if( Dim ==3 and  uni_sig ==2){//uniform grafting 
 	 unif_sig ( u , m );
-	 gind = k*ng_per_partic + m;
+	 gind = k*(ngb_per_partic+ng_per_partic) + m;
 	  if(k==0  and m==0)cout<<"uniform grafting is used"<<endl;
       }
       else{ //random grafting sites
       	random_u( u ) ;
-      	gind = k*ng_per_partic + m;
+      	if(Dim == 3) gind = k*(ng_per_partic+ngb_per_partic) + m;
 	 if(k==0 and m==0)cout<<"random grafting is used"<<endl;
       }
 
 
       for ( j=0 ; j<Dim ; j++ ) {
         x[ind][j] = x[center_ind][j] + Rp * u[j] ;
-        grf_bf_x[gind][j] = Rp * u[j];
+        if(Dim == 3)  grf_bf_x[gind][j] = Rp * u[j];
 
         if ( x[ind][j] > L[j] )
           x[ind][j] -= L[j] ;
@@ -830,7 +848,7 @@ void random_config( void ) {
 
       tp[ ind ] = -1 ;
 
-      if ( m > 0 ) {
+      if ( Dim == 3 and m > 0 ) {
         double mdr2, dr[Dim], mdr ;
         mdr2 = pbc_mdr2( x[ prev_graft ] , x[ ind ] , dr ) ;
         mdr = sqrt( mdr2 ) ;

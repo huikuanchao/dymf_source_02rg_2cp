@@ -68,6 +68,34 @@ reduction(+:Ubond)
 	    
 
 	   }//m=ng_per_oartic
+	   
+	   for( m=0 ; m<ngb_per_partic ; m++){	
+	      ind = center_ind + ng_per_partic*(Ng+1)+m * ( Ngb + 1 ) + 1 ;
+	     // gind = ng_per_partic*i + m;
+	      mdr2 = pbc_mdr2( x[ind+1] , x[ind] , dr ) ;//dist between r' and r 
+	      mdrp2 = pbc_mdr2(x[ind],x[center_ind],drp) ; //dist between rcm and r
+	      if(tp[ind] != -1) { cout<<"wrong trq calc !!"<<endl; exit(1);} 
+
+		Ubond += 1.5*mdr2;	   
+	      for(j=0;j<3;j++){
+
+	        for(k=0 ; k<Dim ; k++){
+			for(l=0; l<Dim ; l++){
+		   		real_trq[i][j] += 3.0*epslon[j][k][l]*drp[k]*dr[l];	   
+			//	real_trq[i][j] += epslon[j][k][l]*drp[k]*f[ind][l];			       
+			}//l
+	      	
+
+		
+		}//k
+		
+	      }//j, torque dim
+
+
+	    
+
+	   }//m=ng_per_oartic
+
 
 	   //get the quaternions' langevin force term, trq//
 	   for( m = 0; m<4; m++){

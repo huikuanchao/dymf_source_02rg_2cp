@@ -28,8 +28,9 @@ void charge_grid( ) {
   ////////////////////////////////////////////////////
 #pragma omp parallel for
   for ( i=0 ; i<nstot ; i++ ) {
-    if ( tp[i] != -1 )
-      add_segment( i ) ;
+    if ( tp[i] != -1 ){
+     add_segment( i ) ;
+     }
   }
 
 #pragma omp parallel for private(j)
@@ -177,7 +178,9 @@ void add_segment( int id ) {
             rhop_t[tid][ Mindex ] += W3 / CG_ratio ;
           else if ( tp[id] == 0 )
             rhoga_t[tid][ Mindex ] += W3 / CG_ratio ;
-          else {
+          else if( tp[id] == 1)
+	    rhogb_t[tid][ Mindex ] += W3 / CG_ratio ;
+	  else {
             char nm[40] ;
             sprintf(nm, "Invalid partic type. tp[%d] = %d\n" , id, tp[id] ) ;
             die(nm);

@@ -54,13 +54,11 @@ int main( int argc , char** argv ) {
       chiAB = chi_bkp ;
 
    
-
     forces() ;
     if(sigma>0){
     if(Dim ==3 )torque();
      else torque_2d();
     }
-  //  exit(1);
 
     if(step >0 || rst_para == 1)
    	update_positions() ;
@@ -72,6 +70,7 @@ int main( int argc , char** argv ) {
         else update_euler_2d();
    }  
 
+  
 
     if ( stress_freq > 0 && step % stress_freq == 0 ) {
       calc_stress() ;
@@ -125,7 +124,7 @@ int main( int argc , char** argv ) {
       if ( stress_freq > 0 )
         write_stress() ;
 
-
+      write_grid_data( "rhogb.dat" , rhogb) ;
       write_grid_data( "rhoda.dat" , rhoda ) ;
       write_grid_data( "rhodb.dat" , rhodb ) ;
       

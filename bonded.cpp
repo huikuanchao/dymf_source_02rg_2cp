@@ -9,11 +9,10 @@ void gnp_bonds( ) {
   int sites_per_gnp = 1 + ngb_per_partic*(1+Ngb) +ng_per_partic * ( 1 + Ng ), prev_graft_site ;
  
   kgraft = 20.0 ;
-#pragma omp parallel for \
+//#pragma omp parallel for \
   private( center_ind, m, ind, mdr2, dr, j, k, prev_graft_site ) \
   reduction(+:Ubond)
   for ( i=0 ; i<nP ; i++ ) {
-
     center_ind = nD * ( Nda + Ndb ) + nA * Nha + nB * Nhb + sites_per_gnp * i ;
 
     for ( m=0 ; m<ng_per_partic ; m++ ) {
@@ -40,7 +39,7 @@ void gnp_bonds( ) {
       }
 
     }// for ( m=0 ; m<ng_per_partic ;
-    
+   
     for ( m=0 ; m<ngb_per_partic ; m++ ) {
       ind = center_ind + ng_per_partic*(Ng+1)+ m * ( Ngb + 1 ) + 1 ;
 
@@ -48,7 +47,7 @@ void gnp_bonds( ) {
       prev_graft_site = ind ;
       ind++ ;
       
-      for ( k=0 ; k<Ng ; k++ ) {
+      for ( k=0 ; k<Ngb ; k++ ) {
         mdr2 = pbc_mdr2( x[ind] , x[ind-1] , dr ) ;
 	Ubond += mdr2 * 1.5 ;
 
@@ -65,7 +64,6 @@ void gnp_bonds( ) {
       }
 
     }// for ( m=0 ; m<ngb_per_partic ;
- 
   }//for ( i=0 ; i<nP 
 }
 
@@ -143,10 +141,7 @@ void bonds( ) {
 
   } // for ( i=0 ; i<nT[k]
 
-  
   gnp_bonds() ;
-
-
 }
 
 
